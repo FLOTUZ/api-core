@@ -1,0 +1,21 @@
+{
+  "name": "api-core",
+  "version": "1.0.0",
+  "description": "Api para el backend de the core",
+  "main": "index.js",
+  "scripts": {
+    "start": "cls && nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "The core devs",
+  "license": "ISC",
+  "dependencies": {
+    "@woocommerce/woocommerce-rest-api": "^1.0.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.7",
+    "urllib": "^2.37.2"
+  }
+}
