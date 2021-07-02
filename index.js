@@ -35,7 +35,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get("/usuarios", (req, res) => {
+app.get("/", (req, res) => {
   res.send("API THE CORE");
 });
 
