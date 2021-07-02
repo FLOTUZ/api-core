@@ -673,8 +673,7 @@ app.get("/ordenes", (req, res) => {
        monto,
        cantidad,
        descripcion_corta,
-       registrada,
-       ventas_registardas_idVentasRegistradas
+       registrada
 from ordenesdecompra`;
 
   pool.query(query, (error, results) => {
@@ -698,8 +697,7 @@ app.get("/ordenes/:id", (req, res) => {
        monto,
        cantidad,
        descripcion_corta,
-       registrada,
-       ventas_registardas_idVentasRegistradas
+       registrada
   from ordenesdecompra where idOrdenesDeCompra like ${id}`;
   pool.query(query, (error, results) => {
     if (error) {
@@ -732,8 +730,7 @@ app.post("/ordenes/", (req, res) => {
     monto, 
     cantidad, 
     descripcion_corta,
-    registrada, 
-    ventas_registardas_idVentasRegistradas)
+    registrada
   values ('${folio}',
           '${productos}',
           '${fecha}',
@@ -742,8 +739,7 @@ app.post("/ordenes/", (req, res) => {
           '${monto}',
           '${cantidad}',
           '${descripcion_corta}',
-          '${registrada}',
-          '${idventasResgistradas}')`;
+          '${registrada}'`;       
   pool.query(query, (error, results) => {
     if (error) {
       res.json(error);
@@ -764,8 +760,7 @@ app.put("/ordenes/:id", (req, res) => {
     monto,
     cantidad,
     descripcion_corta,
-    registrada,
-    idventasResgistradas,
+    registrada
   } = req.body;
   let query = `
   update ordenesdecompra
@@ -777,8 +772,7 @@ app.put("/ordenes/:id", (req, res) => {
     monto= '${monto}',
     cantidad= '${cantidad}',
     descripcion_corta= '${descripcion_corta}',
-    registrada= '${registrada}',
-    ventas_registardas_idVentasRegistradas = '${idventasResgistradas}'
+    registrada= '${registrada}'
   where idOrdenesDeCompra like ${id}`;
 
   pool.query(query, (error, results) => {
