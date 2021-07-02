@@ -89,13 +89,6 @@ app.post("/usuarios", (req, res) => {
   }
 });
 
-/*
-    nombre:Joe Miguel
-    apellidos:Rdz Sierro
-    email:joe@mail.co
-    password:123
-    activo: 1
-*/
 app.put("/usuarios/:id", (req, res) => {
   let { id } = req.params;
   const { nombre, apellidos, password, activo } = req.body;
@@ -136,23 +129,293 @@ app.delete("/usuarios/:id", (req, res) => {
     } else {
       results.affectedRows == 0
         ? res.json({ msg: "No existe usuario" })
-        : res.json({msg: 'Se borro usuario', results});
+        : res.json({ msg: "Se borro usuario", results });
     }
   });
 });
 
 // --------------- Tabla Productos Publicados------------
-app.get("/productos/publicados", (req, res) => {});
+app.get("/productos/publicados", (req, res) => {
+  let query = `select idProductoPublicado,
+  CVE_ART,
+  DESCR,
+  EXIST,
+  LIN_PROD,
+  UNI_MED,
+  NUM_MON,
+  FCH_ULTCOM,
+  ULT_COSTO,
+  CVE_IMAGEN,
+  UUID,
+  CVE_UNIDAD,
+  CVE_ALT,
+  CAMP_LIBRE1,
+  CAMP_LIBRE2,
+  CAMP_LIBRE3,
+  CAMP_LIBRE4,
+  CAMP_LIBRE5,
+  CAMP_LIBRE6,
+  CAMP_LIBRE7,
+  PRECIO_VTA,
+  PRECIO_VTA_ML,
+  PRECIO_VTA_AMZ,
+  PRECIO_VTA_WWC,
+  P_ML,
+  P_AMZ,
+  P_WC,
+  DESC_LARGA,
+  STATUS,
+  COSTO_PROM,
+  STOCK_MIN,
+  STOCK_MAX,
+  FCH_ULTVTA,
+  TIPO_ELE,
+  PESO,
+  VOLUMEN,
+  BLK_CST_EXT,
+  LINK_A_TIENDA,
+  F_CREACION
+from productos_publicados;`;
 
-app.get("/productos/publicados/:id", (req, res) => {});
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
 
-app.post("/productos/publicados", (req, res) => {});
+app.get("/productos/publicados/:id", (req, res) => {
+  let { id } = req.params;
+  let query = `
+  select idProductoPublicado,
+       CVE_ART,
+       DESCR,
+       EXIST,
+       LIN_PROD,
+       UNI_MED,
+       NUM_MON,
+       FCH_ULTCOM,
+       ULT_COSTO,
+       CVE_IMAGEN,
+       UUID,
+       CVE_UNIDAD,
+       CVE_ALT,
+       CAMP_LIBRE1,
+       CAMP_LIBRE2,
+       CAMP_LIBRE3,
+       CAMP_LIBRE4,
+       CAMP_LIBRE5,
+       CAMP_LIBRE6,
+       CAMP_LIBRE7,
+       PRECIO_VTA,
+       PRECIO_VTA_ML,
+       PRECIO_VTA_AMZ,
+       PRECIO_VTA_WWC,
+       P_ML,
+       P_AMZ,
+       P_WC,
+       DESC_LARGA,
+       STATUS,
+       COSTO_PROM,
+       STOCK_MIN,
+       STOCK_MAX,
+       FCH_ULTVTA,
+       TIPO_ELE,
+       PESO,
+       VOLUMEN,
+       BLK_CST_EXT,
+       LINK_A_TIENDA,
+       F_CREACION
+from productos_publicados where idProductoPublicado like ${id}`;
 
-app.put("/productos/publicados/:id", (req, res) => {});
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
 
-app.delete("/productos/publicados/:id", (req, res) => {});
+app.post("/productos/publicados", (req, res) => {
+  let { id } = req.params;
+  const {
+    CVE_ART,
+    DESCR,
+    EXIST,
+    LIN_PROD,
+    UNI_MED,
+    FCH_ULTCOM,
+    NUM_MON,
+    ULT_COSTO,
+    CVE_IMAGEN,
+    UUID,
+    CVE_UNIDAD,
+    CVE_ALT,
+    CAMP_LIBRE1,
+    CAMP_LIBRE2,
+    CAMP_LIBRE3,
+    CAMP_LIBRE4,
+    CAMP_LIBRE5,
+    CAMP_LIBRE6,
+    CAMP_LIBRE7,
+    PRECIO_VTA,
+    PRECIO_VTA_ML,
+    PRECIO_VTA_AMZ,
+    PRECIO_VTA_WWC,
+    P_ML,
+    P_AMZ,
+    P_WC,
+    DESC_LARGA,
+    STATUS,
+    COSTO_PROM,
+    STOCK_MIN,
+    STOCK_MAX,
+    FCH_ULTVTA,
+    TIPO_ELE,
+    PESO,
+    VOLUMEN,
+    BLK_CST_EXT,
+    LINK_A_TIENDA,
+  } = req.body;
 
-// --------------- Tabla Productos Publicados------------
+  let query = `insert into productos_publicados (
+    CVE_ART, DESCR, EXIST, LIN_PROD, UNI_MED, 
+    NUM_MON, FCH_ULTCOM, ULT_COSTO, CVE_IMAGEN, 
+    UUID, CVE_UNIDAD, CVE_ALT, CAMP_LIBRE1, 
+    CAMP_LIBRE2, CAMP_LIBRE3, CAMP_LIBRE4, CAMP_LIBRE5,
+    CAMP_LIBRE6, CAMP_LIBRE7, PRECIO_VTA, 
+    PRECIO_VTA_ML, PRECIO_VTA_AMZ, PRECIO_VTA_WWC,
+    P_ML, P_AMZ, P_WC, DESC_LARGA, STATUS, COSTO_PROM,
+    STOCK_MIN, STOCK_MAX, FCH_ULTVTA, TIPO_ELE,
+    PESO, VOLUMEN, BLK_CST_EXT,LINK_A_TIENDA) 
+      values ( '${CVE_ART}', '${DESCR}', '${EXIST}', '${LIN_PROD}', '${UNI_MED}',
+      '${NUM_MON}', '${FCH_ULTCOM}', '${ULT_COSTO}', '${CVE_IMAGEN}',
+      '${UUID}', '${CVE_UNIDAD}', '${CVE_ALT}', '${CAMP_LIBRE1}', '${CAMP_LIBRE2}',
+      '${CAMP_LIBRE3}', '${CAMP_LIBRE4}', '${CAMP_LIBRE5}', '${CAMP_LIBRE6}',
+      '${CAMP_LIBRE7}', '${PRECIO_VTA}', '${PRECIO_VTA_ML}', '${PRECIO_VTA_AMZ}',
+      '${PRECIO_VTA_WWC}', '${P_ML}', '${P_AMZ}', '${P_WC}', '${DESC_LARGA}', '${STATUS}',
+      '${COSTO_PROM}', '${STOCK_MIN}', '${STOCK_MAX}', '${FCH_ULTVTA}', '${TIPO_ELE}',
+      '${PESO}', '${VOLUMEN}', '${BLK_CST_EXT}', '${LINK_A_TIENDA}');`;
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json({ msg: "Se modifico producto publicado", results });
+    }
+  });
+});
+
+app.put("/productos/publicados/:id", (req, res) => {
+  let { id } = req.params;
+  const {
+    CVE_ART,
+    DESCR,
+    EXIST,
+    LIN_PROD,
+    UNI_MED,
+    NUM_MON,
+    FCH_ULTCOM,
+    ULT_COSTO,
+    CVE_IMAGEN,
+    UUID,
+    CVE_UNIDAD,
+    CVE_ALT,
+    CAMP_LIBRE1,
+    CAMP_LIBRE2,
+    CAMP_LIBRE3,
+    CAMP_LIBRE4,
+    CAMP_LIBRE5,
+    CAMP_LIBRE6,
+    CAMP_LIBRE7,
+    PRECIO_VTA,
+    PRECIO_VTA_ML,
+    PRECIO_VTA_AMZ,
+    PRECIO_VTA_WWC,
+    P_ML,
+    P_AMZ,
+    P_WC,
+    DESC_LARGA,
+    STATUS,
+    COSTO_PROM,
+    STOCK_MIN,
+    STOCK_MAX,
+    FCH_ULTVTA,
+    TIPO_ELE,
+    PESO,
+    VOLUMEN,
+    BLK_CST_EXT,
+    LINK_A_TIENDA,
+    F_CREACION,
+  } = req.body;
+
+  let query = `update productos_publicados
+    set CVE_ART = '${CVE_ART}',
+        DESCR = '${DESCR}',
+        EXIST = '${EXIST}',
+        LIN_PROD = '${LIN_PROD}',
+        UNI_MED = '${UNI_MED}',
+        NUM_MON = '${NUM_MON}',
+        FCH_ULTCOM = '${FCH_ULTCOM}',
+        ULT_COSTO = '${ULT_COSTO}',
+        CVE_IMAGEN = '${CVE_ALT}',
+        UUID = '${UUID}',
+        CVE_UNIDAD = '${CVE_UNIDAD}',
+        CVE_ALT = '${CVE_ALT}',
+        CAMP_LIBRE1 = '${CAMP_LIBRE1}',
+        CAMP_LIBRE2 = '${CAMP_LIBRE2}',
+        CAMP_LIBRE3 = '${CAMP_LIBRE3}',
+        CAMP_LIBRE4 = '${CAMP_LIBRE4}',
+        CAMP_LIBRE5 = '${CAMP_LIBRE5}',
+        CAMP_LIBRE6 = '${CAMP_LIBRE6}',
+        CAMP_LIBRE7 = '${CAMP_LIBRE7}',
+        PRECIO_VTA = '${PRECIO_VTA}',
+        PRECIO_VTA_ML = '${PRECIO_VTA_ML}',
+        PRECIO_VTA_AMZ = '${PRECIO_VTA_AMZ}',
+        PRECIO_VTA_WWC = '${PRECIO_VTA_WWC}',
+        P_ML = '${P_ML}',
+        P_AMZ = '${P_AMZ}',
+        P_WC = '${P_WC}',
+        DESC_LARGA = '${DESC_LARGA}',
+        STATUS = '${STATUS}',
+        COSTO_PROM = '${COSTO_PROM}',
+        STOCK_MIN = '${STOCK_MIN}',
+        STOCK_MAX = '${STOCK_MAX}',
+        FCH_ULTVTA = '${FCH_ULTVTA}',
+        TIPO_ELE = '${TIPO_ELE}',
+        PESO = '${PESO}',
+        VOLUMEN = '${VOLUMEN}',
+        BLK_CST_EXT = '${BLK_CST_EXT}',
+        LINK_A_TIENDA = '${LINK_A_TIENDA}',
+        F_CREACION = '${F_CREACION}'
+    where ${id};`;
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json({ msg: "Se modifico producto publicado", results });
+    }
+  });
+});
+
+app.delete("/productos/publicados/:id", (req, res) => {
+  let { id } = req.params;
+
+  let query = `delete from productos_publicados where idProductoPublicado like ${id};`;
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      results.affectedRows == 0
+        ? res.json({ msg: "No existe producto" })
+        : res.json({ msg: "Se borro producto", results });
+    }
+  });
+});
+
+// --------------- Tabla Productos ASPEL------------
 app.get("/productos/aspel", (req, res) => {});
 
 app.get("/productos/aspel/:id", (req, res) => {});
