@@ -22,7 +22,7 @@ const wc = new WooCommerceRestApi({
 const mysql = require("mysql");
 let pool = mysql.createPool({
   connectionLimit: 10,
-  host: "localhost",
+  host: "198.199.83.125",
   user: "core",
   password: "papaya papaya",
   database: "core",
