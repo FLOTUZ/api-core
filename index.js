@@ -710,8 +710,7 @@ app.get("/ordenes/:id", (req, res) => {
   });
 });
 
-app.post("/ordenes/:id", (req, res) => {
-  let { id } = req.params;
+app.post("/ordenes/", (req, res) => {
   const {
     folio,
     productos,
