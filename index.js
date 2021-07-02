@@ -36,18 +36,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // ---------------tabla usuario-----------------------
-app.get("/usuarios/:id", (req, res) => {
-  const { id } = req.params;
-
-  let query = `select * from usuario where idUsuario like ${id}`;
-  pool.query(query, (error, results) => {
-    if (error) {
-      res.json(error);
-    } else {
-      res.json({ user: results[0] });
-    }
-  });
-});
 
 app.get("/usuarios", (req, res) => {
   let query =
@@ -57,6 +45,19 @@ app.get("/usuarios", (req, res) => {
       res.json(error);
     } else {
       res.json({ results: results });
+    }
+  });
+});
+
+app.get("/usuarios/:id", (req, res) => {
+  const { id } = req.params;
+
+  let query = `select * from usuario where idUsuario like ${id}`;
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json({ user: results[0] });
     }
   });
 });
@@ -393,8 +394,7 @@ app.put("/productos/publicados/:id", (req, res) => {
   ) {
     res.json("Verifique los datos");
   } else {
-    
-  let query = `update productos_publicados
+    let query = `update productos_publicados
     set CVE_ART = '${CVE_ART}',
         DESCR = '${DESCR}',
         EXIST = '${EXIST}',
@@ -434,13 +434,14 @@ app.put("/productos/publicados/:id", (req, res) => {
         LINK_A_TIENDA = '${LINK_A_TIENDA}',
         F_CREACION = '${F_CREACION}'
     where ${id};`;
-  pool.query(query, (error, results) => {
-    if (error) {
-      res.json(error);
-    } else {
-      res.json({ msg: "Se modifico producto publicado", results });
-    }
-  });
+    pool.query(query, (error, results) => {
+      if (error) {
+        res.json(error);
+      } else {
+        res.json({ msg: "Se modifico producto publicado", results });
+      }
+    });
+  }
 });
 
 app.delete("/productos/publicados/:id", (req, res) => {
@@ -459,15 +460,205 @@ app.delete("/productos/publicados/:id", (req, res) => {
 });
 
 // --------------- Tabla Productos ASPEL------------
-app.get("/productos/aspel", (req, res) => {});
+app.get("/productos/aspel", (req, res) => {
+  let query = `select idProducto,
+    CVE_ART,
+    DESCR,
+    EXIST,
+    LIN_PROD,
+    UNI_MED,
+    NUM_MON,
+    FCH_ULTCOM,
+    ULT_COSTO,
+    CVE_IMAGEN,
+    UUID,
+    CVE_UNIDAD,
+    CVE_ALT,
+    CAMPLIB3,
+    CAMPLIB4,
+    CAMPLIB5,
+    PRECIO6,
+    CAMPO_LIBRE7,
+    CAMPO_LIBRE8
+from aspel`;
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
 
-app.get("/productos/aspel/:id", (req, res) => {});
+app.get("/productos/aspel/:id", (req, res) => {
+  let { id } = req.params;
 
-app.post("/productos/aspel", (req, res) => {});
+  let query = `select idProducto,
+  CVE_ART,
+  DESCR,
+  EXIST,
+  LIN_PROD,
+  UNI_MED,
+  NUM_MON,
+  FCH_ULTCOM,
+  ULT_COSTO,
+  CVE_IMAGEN,
+  UUID,
+  CVE_UNIDAD,
+  CVE_ALT,
+  CAMPLIB3,
+  CAMPLIB4,
+  CAMPLIB5,
+  PRECIO6,
+  CAMPO_LIBRE7,
+  CAMPO_LIBRE8
+from aspel where idProducto like ${id};`;
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
 
-app.put("/productos/aspel/:id", (req, res) => {});
+app.post("/productos/aspel", (req, res) => {
+  const {
+    CVE_ART,
+    DESCR,
+    EXIST,
+    LIN_PROD,
+    UNI_MED,
+    NUM_MON,
+    FCH_ULTCOM,
+    ULT_COSTO,
+    CVE_IMAGEN,
+    UUID,
+    CVE_UNIDAD,
+    CVE_ALT,
+    CAMPLIB3,
+    CAMPLIB4,
+    CAMPLIB5,
+    PRECIO6,
+    CAMPO_LIBRE7,
+    CAMPO_LIBRE8,
+  } = req.body;
 
-app.delete("/productos/aspel/:id", (req, res) => {});
+  let query = `
+  insert into aspel (CVE_ART
+    DESCR,
+    EXIST,
+    LIN_PROD,
+    UNI_MED,
+    NUM_MON,
+    FCH_ULTCOM,
+    ULT_COSTO,
+    CVE_IMAGEN,
+    UUID,
+    CVE_UNIDAD,
+    CVE_ALT,
+    CAMPLIB3,
+    CAMPLIB4,
+    CAMPLIB5,
+    PRECIO6,
+    CAMPO_LIBRE7,
+    CAMPO_LIBRE8)
+      values (
+      '${CVE_ART}',
+      '${DESCR}',
+      '${EXIST}',
+      '${LIN_PROD}',
+      '${UNI_MED}',
+      '${NUM_MON}',
+      '${FCH_ULTCOM}',
+      '${ULT_COSTO}',
+      '${CVE_IMAGEN}',
+      '${UUID}',
+      '${CVE_ALT}',
+      '${CAMPLIB3}',
+      '${CAMPLIB4}',
+      '${CAMPLIB5}',
+      '${PRECIO6}',
+      '${CAMPO_LIBRE7}',
+      '${CAMPO_LIBRE8}');`;
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json({ msg: "Se ha dado de alta", results });
+    }
+  });
+});
+
+app.put("/productos/aspel/:id", (req, res) => {
+  let { id } = req.params;
+
+  const {
+    CVE_ART,
+    DESCR,
+    EXIST,
+    LIN_PROD,
+    UNI_MED,
+    NUM_MON,
+    FCH_ULTCOM,
+    ULT_COSTO,
+    CVE_IMAGEN,
+    UUID,
+    CVE_UNIDAD,
+    CVE_ALT,
+    CAMPLIB3,
+    CAMPLIB4,
+    CAMPLIB5,
+    PRECIO6,
+    CAMPO_LIBRE7,
+    CAMPO_LIBRE8,
+  } = req.body;
+  let query = `
+  update aspel
+  set
+    CVE_ART = '${CVE_ART}',
+    DESCR = '${DESCR}',
+    EXIST = '${EXIST}',
+    LIN_PROD = '${LIN_PROD}',
+    UNI_MED = '${UNI_MED}',
+    NUM_MON = '${NUM_MON}',
+    FCH_ULTCOM = '${FCH_ULTCOM}',
+    ULT_COSTO = '${ULT_COSTO}',
+    CVE_IMAGEN = '${CVE_IMAGEN}',
+    UUID = '${UUID}',
+    CVE_UNIDAD = '${CVE_UNIDAD}',
+    CVE_ALT = '${CVE_ALT}',
+    CAMPLIB3 = '${CAMPLIB3}',
+    CAMPLIB4 = '${CAMPLIB4}',
+    CAMPLIB5 = '${CAMPLIB5}',
+    PRECIO6 = '${PRECIO6}',
+    CAMPO_LIBRE7 = '${CAMPO_LIBRE7}',
+    CAMPO_LIBRE8 = '${CAMPO_LIBRE8}'
+  where idProducto like '${id}';`;
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json({ msg: "Se modifico producto aspel", results });
+    }
+  });
+});
+
+app.delete("/productos/aspel/:id", (req, res) => {
+  const { id } = req.params;
+  let query = `delete
+  from aspel
+  where idProducto like ${id}`;
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json({ msg: "Se elimino producto", results });
+    }
+  });
+});
 
 //                      [ WooCommerce ]
 
