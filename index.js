@@ -804,10 +804,59 @@ app.delete("/ordenes/:id", (req, res) => {
 
 //---------------  NOTIFICACIONES ---------------------------------------------------------------------------------------------------
 
-app.get("/notificaciones", (req, res) => {});
-app.post("/notificaciones/:id", (req, res) => {});
-app.put("/notificaciones/:id", (req, res) => {});
-app.delete("/notificaciones/:id", (req, res) => {});
+app.get("/notificaciones", (req, res) => {
+  let query = `select idNotificicaciones, titulo, descripcion, tiempo, ordenesDeCompra_idordenesDeCompra from notificicaciones`;
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+app.post("/notificaciones/", (req, res) => {
+  const { titulo, descripcion, tiempo, ordenesDeCompra_idordenesDeCompra } =
+    req.body;
+  let query = `insert into notificicaciones (titulo, descripcion, tiempo, ordenesDeCompra_idordenesDeCompra)
+  values ('${titulo}','${descripcion}','${tiempo}', '${ordenesDeCompra_idordenesDeCompra}');`;
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+app.put("/notificaciones/:id", (req, res) => {
+  let { id } = req.params;
+  const { titulo, descripcion } = req.body;
+
+  let query = `update notificicaciones
+  set titulo = '${titulo}', descripcion = '${descripcion}'
+  where idNotificicaciones like ${id};`;
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+app.delete("/notificaciones/:id", (req, res) => {
+  const { id } = req.params;
+  let query = `delete from notificicaciones where idNotificicaciones like '${id}'`;
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
 
 //                                                          [ WooCommerce ]
 
