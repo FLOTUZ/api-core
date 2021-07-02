@@ -739,7 +739,7 @@ app.post("/ordenes/", (req, res) => {
           '${monto}',
           '${cantidad}',
           '${descripcion_corta}',
-          '${registrada}'`;       
+          '${registrada}'`;
   pool.query(query, (error, results) => {
     if (error) {
       res.json(error);
@@ -760,7 +760,7 @@ app.put("/ordenes/:id", (req, res) => {
     monto,
     cantidad,
     descripcion_corta,
-    registrada
+    registrada,
   } = req.body;
   let query = `
   update ordenesdecompra
@@ -842,6 +842,141 @@ app.put("/notificaciones/:id", (req, res) => {
 app.delete("/notificaciones/:id", (req, res) => {
   const { id } = req.params;
   let query = `delete from notificicaciones where idNotificicaciones like '${id}'`;
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+//---------------  WC-KEYS ---------------------------------------------------------------------------------------------------
+app.get("/wc-keys", (req, res) => {
+  let query =
+    "select idapiKey, key_id, user_id, consumer_key, consumer_secret, key_permissions from `wc-keys`";
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+app.post("/wc-keys", (req, res) => {
+  const { key_id, user_id, consumer_key, consumer_secret, key_permissions } =
+    req.body;
+
+  let query =
+    "insert into `wc-keys` (key_id, user_id, consumer_key, consumer_secret, key_permissions)" +
+    `values ('${key_id}','${user_id}','${consumer_key}','${consumer_secret}','${key_permissions}')`;
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+app.put("/wc-keys/:id", (req, res) => {
+  const { id } = req.params;
+  const { key_id, user_id, consumer_key, consumer_secret, key_permissions } =
+    req.body;
+
+  let query =
+    "update `wc-keys`" +
+    `set  key_id = '${key_id}', 
+  user_id = '${user_id}', 
+  consumer_key = '${consumer_key}', 
+  consumer_secret = '${consumer_secret}', 
+  key_permissions ='${key_permissions}'
+  where idapiKey like  '${id}'`;
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+app.delete("/wc-keys/:id", (req, res) => {});
+
+//---------------  ML-KEYS ---------------------------------------------------------------------------------------------------
+app.get("/ml-keys", (req, res) => {
+  let query =
+    "select idMLKeys, access_token, token_type, expires_in, scope, user_id, refresh_token from `ml-keys`";
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+app.post("/ml-keys", (req, res) => {
+  const {
+    access_token,
+    token_type,
+    expires_in,
+    scope,
+    user_id,
+    refresh_token,
+  } = req.body;
+
+  let query =
+    "insert into `ml-keys` (access_token, token_type, expires_in, scope, user_id, refresh_token)" +
+    `values ('${access_token}','${token_type}','${expires_in}','${scope}','${user_id}','${refresh_token}')`;
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+app.put("/ml-keys/:id", (req, res) => {
+  const { id } = req.params;
+
+  const {
+    access_token,
+    token_type,
+    expires_in,
+    scope,
+    user_id,
+    refresh_token,
+  } = req.body;
+
+  let query =
+    "update `ml-keys`" +
+    `set access_token = '${access_token}', 
+        token_type = '${token_type}', 
+        expires_in = '${expires_in}', 
+        scope = '${scope}', 
+        user_id = '${user_id}', 
+        refresh_token = '${refresh_token}'
+    where idMLKeys like ${id}`;
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+app.delete("/ml-keys/:id", (req, res) => {
+  const { id } = req.params;
+
+  let query ="delete from `ml-keys`" +
+  `where idMLKeys like ${id}`;
 
   pool.query(query, (error, results) => {
     if (error) {
