@@ -31,6 +31,11 @@ let pool = mysql.createPool({
 
 //Para aceptar origenes cruzados
 app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE"); // If needed
+  next();
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -40,7 +45,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  const { email, password } = req.body;
+  const { email, password } = req.query;
 
   let query = `select nombre, apellidos, email, password from usuario where email like '${email}';`;
 
