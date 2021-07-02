@@ -35,7 +35,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// ---------------tabla usuario-----------------------
+// ---------------tabla usuario---------------------------------------------------------------------------------------------------
 
 app.get("/usuarios", (req, res) => {
   let query =
@@ -135,7 +135,7 @@ app.delete("/usuarios/:id", (req, res) => {
   });
 });
 
-// --------------- Tabla Productos Publicados------------
+// --------------- Tabla Productos Publicados----------------------------------------------------------------------------------------
 app.get("/productos/publicados", (req, res) => {
   let query = `select idProductoPublicado,
   CVE_ART,
@@ -459,7 +459,7 @@ app.delete("/productos/publicados/:id", (req, res) => {
   });
 });
 
-// --------------- Tabla Productos ASPEL------------
+// --------------- Tabla Productos ASPEL----------------------------------------------------------------------------------------
 app.get("/productos/aspel", (req, res) => {
   let query = `select idProducto,
     CVE_ART,
@@ -660,9 +660,159 @@ app.delete("/productos/aspel/:id", (req, res) => {
   });
 });
 
-//                      [ WooCommerce ]
+//---------------  ORDENES ---------------------------------------------------------------------------------------------------------
 
-//--------------Consultar solo un producto------------------
+app.get("/ordenes", (req, res) => {
+  let query = `
+  select idOrdenesDeCompra,
+       folio_en_tienda,
+       productos,
+       fecha,
+       total,
+       link_orden,
+       monto,
+       cantidad,
+       descripcion_corta,
+       registrada,
+       ventas_registardas_idVentasRegistradas
+from ordenesdecompra`;
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+app.get("/ordenes/:id", (req, res) => {
+  let { id } = req.params;
+  let query = `
+  select idOrdenesDeCompra,
+       folio_en_tienda,
+       productos,
+       fecha,
+       total,
+       link_orden,
+       monto,
+       cantidad,
+       descripcion_corta,
+       registrada,
+       ventas_registardas_idVentasRegistradas
+  from ordenesdecompra where idOrdenesDeCompra like ${id}`;
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+app.post("/ordenes/:id", (req, res) => {
+  let { id } = req.params;
+  const {
+    folio,
+    productos,
+    fecha,
+    total,
+    link_orden,
+    monto,
+    cantidad,
+    descripcion_corta,
+    registrada,
+    idventasResgistradas,
+  } = req.body;
+  let query = `
+  insert into ordenesdecompra (folio_en_tienda, 
+    productos, 
+    fecha, 
+    total, 
+    link_orden, 
+    monto, 
+    cantidad, 
+    descripcion_corta,
+    registrada, 
+    ventas_registardas_idVentasRegistradas)
+  values ('${folio}',
+          '${productos}',
+          '${fecha}',
+          '${total}',
+          '${link_orden}',
+          '${monto}',
+          '${cantidad}',
+          '${descripcion_corta}',
+          '${registrada}',
+          '${idventasResgistradas}')`;
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+app.put("/ordenes/:id", (req, res) => {
+  let { id } = req.params;
+  const {
+    folio,
+    productos,
+    fecha,
+    total,
+    link_orden,
+    monto,
+    cantidad,
+    descripcion_corta,
+    registrada,
+    idventasResgistradas,
+  } = req.body;
+  let query = `
+  update ordenesdecompra
+  set folio_en_tienda = '${folio}',
+    productos= '${productos}',
+    fecha= '${fecha}',
+    total= '${total}',
+    link_orden= '${link_orden}',
+    monto= '${monto}',
+    cantidad= '${cantidad}',
+    descripcion_corta= '${descripcion_corta}',
+    registrada= '${registrada}',
+    ventas_registardas_idVentasRegistradas = '${idventasResgistradas}'
+  where idOrdenesDeCompra like ${id}`;
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+app.delete("/ordenes/:id", (req, res) => {
+  let { id } = req.params;
+  let query = `delete from ordenesdecompra where idOrdenesDeCompra like ${id}`;
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+//---------------  NOTIFICACIONES ---------------------------------------------------------------------------------------------------
+
+app.get("/notificaciones", (req, res) => {});
+app.post("/notificaciones/:id", (req, res) => {});
+app.put("/notificaciones/:id", (req, res) => {});
+app.delete("/notificaciones/:id", (req, res) => {});
+
+//                                                          [ WooCommerce ]
+
+//--------------Consultar solo un producto----------------------------------------------------------------------------------------------
 app.get("/products-wc/:id", async (req, res) => {
   const { id } = req.params;
   const url = `products/${id}`;
@@ -676,7 +826,7 @@ app.get("/products-wc/:id", async (req, res) => {
     });
 });
 
-//---------Consultar todos los productos----------
+//---------Consultar todos los productos--------------------------------------------------------------------------------------
 app.get("/products-wc", async (req, res) => {
   await wc
     .get("products")
@@ -688,7 +838,7 @@ app.get("/products-wc", async (req, res) => {
     });
 });
 
-/* -----------Actualizar producto ----------
+/* -----------Actualizar producto --------------------------------------------------------------------------------------
   aca se le manda el parametro a actualizar
   por ejemplo:
       Si se desea actualizar la descripcion
