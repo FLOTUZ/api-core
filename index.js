@@ -35,6 +35,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+app.get("/usuarios", (req, res) => {
+  res.send("API THE CORE");
+});
+
 // ---------------tabla usuario---------------------------------------------------------------------------------------------------
 
 app.get("/usuarios", (req, res) => {
@@ -975,8 +979,7 @@ app.put("/ml-keys/:id", (req, res) => {
 app.delete("/ml-keys/:id", (req, res) => {
   const { id } = req.params;
 
-  let query ="delete from `ml-keys`" +
-  `where idMLKeys like ${id}`;
+  let query = "delete from `ml-keys`" + `where idMLKeys like ${id}`;
 
   pool.query(query, (error, results) => {
     if (error) {

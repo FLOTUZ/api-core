@@ -4,6 +4,7 @@
   "description": "Api para el backend de the core",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon indej.js",
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
