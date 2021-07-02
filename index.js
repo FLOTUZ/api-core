@@ -351,6 +351,49 @@ app.put("/productos/publicados/:id", (req, res) => {
     F_CREACION,
   } = req.body;
 
+  if (
+    CVE_ART === undefined ||
+    DESCR === undefined ||
+    EXIST === undefined ||
+    LIN_PROD === undefined ||
+    UNI_MED === undefined ||
+    NUM_MON === undefined ||
+    FCH_ULTCOM === undefined ||
+    ULT_COSTO === undefined ||
+    CVE_IMAGEN === undefined ||
+    UUID === undefined ||
+    CVE_UNIDAD === undefined ||
+    CVE_ALT === undefined ||
+    CAMP_LIBRE1 === undefined ||
+    CAMP_LIBRE2 === undefined ||
+    CAMP_LIBRE3 === undefined ||
+    CAMP_LIBRE4 === undefined ||
+    CAMP_LIBRE5 === undefined ||
+    CAMP_LIBRE6 === undefined ||
+    CAMP_LIBRE7 === undefined ||
+    PRECIO_VTA === undefined ||
+    PRECIO_VTA_ML === undefined ||
+    PRECIO_VTA_AMZ === undefined ||
+    PRECIO_VTA_WWC === undefined ||
+    P_ML === undefined ||
+    P_AMZ === undefined ||
+    P_WC === undefined ||
+    DESC_LARGA === undefined ||
+    STATUS === undefined ||
+    COSTO_PROM === undefined ||
+    STOCK_MIN === undefined ||
+    STOCK_MAX === undefined ||
+    FCH_ULTVTA === undefined ||
+    TIPO_ELE === undefined ||
+    PESO === undefined ||
+    VOLUMEN === undefined ||
+    BLK_CST_EXT === undefined ||
+    LINK_A_TIENDA === undefined ||
+    F_CREACION === undefined
+  ) {
+    res.json("Verifique los datos");
+  } else {
+    
   let query = `update productos_publicados
     set CVE_ART = '${CVE_ART}',
         DESCR = '${DESCR}',
