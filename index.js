@@ -39,6 +39,22 @@ app.get("/", (req, res) => {
   res.send("API THE CORE");
 });
 
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+
+  let query = `select nombre, apellidos, email, password from usuario where email like '${email}';`;
+
+  pool.query(query, (error, results) => {
+    if (error) {
+      res.json(error);
+    } else {
+      results[0].password === password
+        ? res.json({ acceso: true, results })
+        : res.json({ acceso: false });
+    }
+  });
+});
+
 // ---------------tabla usuario---------------------------------------------------------------------------------------------------
 
 app.get("/usuarios", (req, res) => {
@@ -78,7 +94,7 @@ app.post("/usuarios", (req, res) => {
   ) {
     res.status(400).json({ msg: "Error, verifique los datos" }); //Error por que faltan datos
   } else {
-    let query = `insert into usuario (nombre, apellidos, email, password) values ('${nombre}','${apellidos}','${email}', SHA1('${password}'))`;
+    let query = `insert into usuario (nombre, apellidos, email, password) values ('${nombre}','${apellidos}','${email}', '${password}')`;
 
     pool.query(query, (error, results) => {
       if (error) {
