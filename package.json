@@ -4,7 +4,7 @@
   "description": "Api para el backend de the core",
   "main": "index.js",
   "scripts": {
-    "start": "cls && nodemon index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "The core devs",
